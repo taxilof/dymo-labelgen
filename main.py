@@ -3,7 +3,7 @@
 import qrcode
 from reportlab.platypus import Paragraph
 from reportlab.lib.utils import ImageReader, simpleSplit
-from reportlab.lib.units import inch
+from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfgen import canvas
 import argparse
@@ -38,10 +38,10 @@ args = parser.parse_args()
 # label size
 if args.size == 'normal':
     # LabelWriter 450 address labels
-    LABEL_SIZE = (1.125*inch, 3.25*inch)
+    LABEL_SIZE = (32*mm, 57*mm)
 elif args.size == 'small':
     # small enough to fit on an akro-mils container
-    LABEL_SIZE = (0.6*inch, 1.75*inch)
+    LABEL_SIZE = (25*mm, 54*mm)
 else:
     print("Size %s not valid" % args.size, end='')
     sys.exit(1)
