@@ -111,7 +111,7 @@ def wrappedTextBox(canvas, text, boxSize, fontName, fontSize):
 
     # print each line
     for i in range(len(lines)):
-        c.drawString(0, -lineHeight * i, lines[i])
+        c.drawCentredString(LABEL_SIZE[1] / 2, -lineHeight * i, lines[i])
 
     c.restoreState()
 
