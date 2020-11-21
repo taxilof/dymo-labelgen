@@ -136,5 +136,5 @@ if args.print:
             sys.exit(0)
 
     print('Printing label...')
-    proc.check_call(['lpr', args.output])
+    proc.check_call(['lp','-o orientation-requested=4', args.output])
     print('Done')
