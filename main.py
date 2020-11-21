@@ -10,6 +10,7 @@ import argparse
 import subprocess as proc
 import sys
 import os
+import urllib.parse
 
 # https://stackoverflow.com/questions/17317219/is-there-an-platform-independent-equivalent-of-os-startfile
 def open_file(filename):
@@ -33,6 +34,12 @@ parser.add_argument('--size', type=str, default='normal', help="One of ['small',
 parser.add_argument('--font_size', type=int, default=10)
 parser.add_argument('--font', type=str, default='Helvetica')
 args = parser.parse_args()
+
+
+# decode 
+args.text = urllib.parse.unquote(args.text).replace('+',' ')
+print('Text: ' + args.text)
+
 
 
 # label size
