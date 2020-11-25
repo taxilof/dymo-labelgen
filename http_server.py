@@ -14,12 +14,12 @@ import os.path
 
 
 
-def call_printer (text, font_size, action):
+def call_printer (text, font_size, font_type, action):
 
     if ('print' in action):
-        cmd = './main.py "' + text + '" --size=small --noconfirm --print --font_size='+font_size
+        cmd = './main.py "' + text + '" --size=small --noconfirm --print --font ' + font_type + ' --font_size='+font_size
     else:
-        cmd = './main.py "' + text + '" --size=small --noconfirm --font_size='+font_size
+        cmd = './main.py "' + text + '" --size=small --noconfirm --font ' + font_type + ' --font_size='+font_size
     print(cmd)
     proc.check_call(cmd,shell=True)
     
@@ -35,7 +35,8 @@ class ConfigHTTPRequestHandler(BaseHTTPRequestHandler):
         self._set_headers('text/html')
         file_path = "index.html"
         with open(file_path, "r") as f:
-            file_data = f.read().replace("RANDOM",str(time.time())).replace("TEXT_VALUE",self.last_text_value)
+            file_data = f.read().replace('RANDOM',str(time.time())).replace('TEXT_VALUE',self.last_text_value)
+            file_data = file_data.replace('FONT_SIZE', self.last_text_size).replace('FONT_TYPE', self.last_text_font)
             self.wfile.write(str.encode(file_data))
             
     def do_GET(self):
@@ -62,14 +63,18 @@ class ConfigHTTPRequestHandler(BaseHTTPRequestHandler):
         # extract params and call printer script
         params = dict(x.split('=') for x in config_string.split('&'))
         print("params: " + str(params))
-        call_printer(params['text'], params['size'], params['action'])
+        call_printer(params['text'], params['size'], params['font'], params['action'])
         self.last_text_value = urllib.parse.unquote(params['text']).replace('+',' ')
-
+        self.last_text_font = params['font']
+        self.last_text_size = params['size']
+        
         self.send_index()
         return
 
 ConfigHTTPRequestHandler.protocol_version = "HTTP/1.0"
 ConfigHTTPRequestHandler.last_text_value = ""
+ConfigHTTPRequestHandler.last_text_font = "Helvetica"
+ConfigHTTPRequestHandler.last_text_size = "20"
 httpd = HTTPServer(("0.0.0.0", 5555), ConfigHTTPRequestHandler)
 
 sa = httpd.socket.getsockname()
