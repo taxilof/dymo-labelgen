@@ -11,6 +11,7 @@ import subprocess as proc
 import sys
 import os
 import urllib.parse
+from pdf2image import convert_from_bytes
 
 # https://stackoverflow.com/questions/17317219/is-there-an-platform-independent-equivalent-of-os-startfile
 def open_file(filename):
@@ -38,7 +39,7 @@ args = parser.parse_args()
 
 # decode 
 args.text = urllib.parse.unquote(args.text).replace('+',' ')
-print('Text: ' + args.text)
+#print('Text: ' + args.text)
 
 
 
@@ -129,6 +130,10 @@ wrappedTextBox(c, args.text, (textWidth, LABEL_SIZE[0]), args.font, args.font_si
 # save label pdf file
 c.save()
 print("Wrote '%s'" % args.output)
+
+# save label as png
+image = convert_from_bytes(c.getpdfdata())[0]
+image.save('label.png')
 
 if args.preview:
     open_file(args.output)
