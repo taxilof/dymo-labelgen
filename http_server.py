@@ -10,6 +10,7 @@ import subprocess as proc
 import json
 import time
 import urllib.parse
+import os.path
 
 
 
@@ -38,7 +39,8 @@ class ConfigHTTPRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(file_data))
             
     def do_GET(self):
-        if "label.png" in self.path:
+        label_png_path = "label.png"
+        if label_png_path in self.path and os.path.isfile(label_png_path) :
             self._set_headers('image/png')
             file_path = "label.png"
             with open(file_path, "rb") as f:
